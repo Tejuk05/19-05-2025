@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Basic CSS for recipe list */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .recipe-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        p {
+            color: #555;
+        }
+
+        img {
+            max-width: 200px;
+            height: auto;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Our Delicious Recipes</h1>
+    {% for recipe in recipes %}
+    <div class="recipe-container">
+        <h2>{{ recipe.title }}</h2>
+        <p>{{ recipe.description }}</p>
+        {% if recipe.image_path %}
+        <img src="{{ recipe.image_path }}" alt="{{ recipe.title }}">
+        {% endif %}
+        <a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}">View Recipe</a>
+    </div>
+    {% empty %}
+    <p>No recipes have been submitted yet.</p>
+    {% endfor %}
+</body>
+
+</html>

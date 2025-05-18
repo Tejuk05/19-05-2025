@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skincare Tips</title>
+    <style>
+        :root {
+            --primary-color: #6a8d73;
+            --secondary-color: #f4f9f4;
+            --accent-color: #e8b4b8;
+            --text-color: #333;
+            --light-text: #666;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #fcfcfc;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .filter-section {
+            background-color: var(--secondary-color);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .filter-btn {
+            background-color: white;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .search-box {
+            display: flex;
+            margin-top: 1.5rem;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .search-box button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        .tips-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .tip-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tip-image {
+            height: 200px;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .tip-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .tip-content {
+            padding: 1.5rem;
+        }
+
+        .tip-category {
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tip-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            color: var(--primary-color);
+        }
+
+        .tip-description {
+            color: var(--light-text);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .tip-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .read-more {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+
+        .tip-tag {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 3rem;
+            gap: 0.5rem;
+        }
+
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ddd;
+            background-color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .page-btn:hover,
+        .page-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .tips-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tips-container {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Skincare Tips & Recommendations</h1>
+        <p>Discover the best tips for your skincare routine</p>
+    </header>
+
+    <div class="container">
+        <section class="filter-section">
+            <h2 class="filter-title">Find the perfect tips for your skin</h2>
+            <div class="filter-options">
+                <button class="filter-btn active">All Tips</button>
+                <button class="filter-btn">Dry Skin</button>
+                <button class="filter-btn">Oily Skin</button>
+                <button class="filter-btn">Combination Skin</button>
+                <button class="filter-btn">Sensitive Skin</button>
+                <button class="filter-btn">Anti-Aging</button>
+                <button class="filter-btn">Acne-Prone</button>
+            </div>
+            <div class="search-box">
+                <input type="text" placeholder="Search for specific skincare tips...">
+                <button>Search</button>
+            </div>
+        </section>
+
+        <section class="tips-container">
+            <!-- Tip Card 1 -->
+            <div class="tip-card">
+                <div class="tip-image">
+                    <img src="/api/placeholder/400/320" alt="Moisturizing technique">
+                </div>
+                <div class="tip-content">
+                    <div class="tip-category">Dry Skin</div>
+                    <h3 class="tip-title">Proper Moisturizing Technique</h3>
+                    <p class="tip-description">Learn the correct way to apply moisturizer for maximum hydration and skin
+                        barrier protection.</p>
+                    <div class="tip-footer">
+                        <a href="#" class="read-more">Read More →</a>
+                        <span class="tip-tag">5 min read</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tip Card 2 -->
+            <div class="tip-card">
+                <div class="tip-image">
+                    <img src="/api/placeholder/400/320" alt="Oil control routine">
+                </div>
+                <div class="tip-content">
+                    <div class="tip-category">Oily Skin</div>
+                    <h3 class="tip-title">Daily Oil Control Routine</h3>
+                    <p class="tip-description">Keep shine at bay with these effective techniques to manage oil
+                        production throughout the day.</p>
+                    <div class="tip-footer">
+                        <a href="#" class="read-more">Read More →</a>
+                        <span class="tip-tag">3 min read</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tip Card 3 -->
+            <div class="tip-card">
+                <div class="tip-image">
+                    <img src="/api/placeholder/400/320" alt="Sunscreen application">
+                </div>
+                <div class="tip-content">
+                    <div class="tip-category">All Skin Types</div>
+                    <h3 class="tip-title">Sunscreen Application Guide</h3>
+                    <p class="tip-description">The complete guide to applying sunscreen correctly for maximum protection
+                        against harmful UV rays.</p>
+                    <div class="tip-footer">
+                        <a href="#" class="read-more">Read More →</a>
+                        <span class="tip-tag">4 min read</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tip Card 4 -->
+            <div class="tip-card">
+                <div class="tip-image">
+                    <img src="/api/placeholder/400/320" alt="Acne treatment">
+                </div>
+                <div class="tip-content">
+                    <div class="tip-category">Acne-Prone</div>
+                    <h3 class="tip-title">Effective Spot Treatments</h3>
+                    <p class="tip-description">Discover the most effective ingredients and methods for treating acne
+                        breakouts quickly.</p>
+                    <div class="tip-footer">
+                        <a href="#" class="read-more">Read More →</a>
+                        <span class="tip-tag">6 min read</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tip Card 5 -->
+            <div class="tip-card">
+                <div class="tip-image">
+                    <img src="/api/placeholder/400/320" alt="Anti-aging routine">
+                </div>
+                <div class="tip-content">
+                    <div class="tip-category">Anti-Aging</div>
+                    <h3 class="tip-title">Nighttime Repair Routine</h3>
+                    <p class="tip-description">The perfect evening skincare routine to promote cellular repair and
+                        prevent premature aging.</p>
+                    <div class="tip-footer">
+                        <a href="#" class="read-more">Read More →</a>
+                        <span class="tip-tag">7 min read</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tip Card 6 -->
+            <div class="tip-card">
+                <div class="tip-image">
+                    <img src="/api/placeholder/400/320" alt="Sensitive skin care">
+                </div>
+                <div class="tip-content">
+                    <div class="tip-category">Sensitive Skin</div>
+                    <h3 class="tip-title">Calming Ingredients Guide</h3>
+                    <p class="tip-description">Learn which ingredients can help soothe irritation and reduce redness for
+                        sensitive skin types.</p>
+                    <div class="tip-footer">
+                        <a href="#" class="read-more">Read More →</a>
+                        <span class="tip-tag">5 min read</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="pagination">
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">4</button>
+            <button class="page-btn">5</button>
+            <button class="page-btn">→</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Skincare Tips Library. All tips are for informational purposes only.</p>
+    </footer>
+</body>
+
+</html>

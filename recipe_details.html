@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ recipe.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .recipe-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .recipe-image-container {
+            width: 100%;
+            max-height: 400px;
+            overflow: hidden;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .recipe-image {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .ingredients-section,
+        .instructions-section {
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #555;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .ingredients-list,
+        .instructions-list {
+            padding-left: 20px;
+        }
+
+        .ingredients-list li,
+        .instructions-list li {
+            margin-bottom: 8px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .description {
+            color: #444;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="recipe-container">
+        <h1>{{ recipe.title }}</h1>
+        {% if recipe.image_name %}
+        <div class="recipe-image-container">
+            <img src="{{ url_for('recipe_image', recipe_id=recipe.id) }}" alt="{{ recipe.title }}" class="recipe-image">
+        </div>
+        {% endif %}
+        <div class="description">
+            <h2>Description</h2>
+            <p>{{ recipe.description }}</p>
+        </div>
+        <div class="ingredients-section">
+            <h2>Ingredients</h2>
+            <ul class="ingredients-list">
+                {% for ingredient in recipe.ingredients %}
+                <li>{{ ingredient.strip() }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="instructions-section">
+            <h2>Instructions</h2>
+            <ol class="instructions-list">
+                {% for instruction in recipe.instructions %}
+                <li>{{ instruction.strip() }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+        <a href="{{ url_for('recipes') }}" class="back-button">Back to Recipes</a>
+    </div>
+</body>
+
+</html>

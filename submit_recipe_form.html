@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Recipe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Basic CSS for the form */
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .form-container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); width: 80%; max-width: 600px; margin: 20px auto; }
+        h2 { text-align: center; color: #333; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        textarea.form-control { resize: vertical; }
+        .upload-container { border: 1px dashed #ccc; padding: 15px; border-radius: 4px; text-align: center; cursor: pointer; }
+        .upload-btn { color: #007bff; }
+        .file-input { display: none; }
+        .form-actions { text-align: center; margin-top: 20px; }
+        .submit-btn, .cancel-btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        .submit-btn { background-color: #5cb85c; color: white; }
+        .cancel-btn { background-color: #f44336; color: white; margin-left: 10px; }
+        .flash-messages { margin-bottom: 15px; }
+        .alert { padding: 10px; border-radius: 4px; margin-bottom: 8px; }
+        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-warning { background-color: #fff3cd; color: #85640a; border: 1px solid #ffeeba; }
+        .alert-danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <main class="main-container">
+        <div class="form-container">
+            <form action="{{ url_for('submit_recipe') }}" method="POST" enctype="multipart/form-data">
+                <h2>Submit Your Recipe</h2>
+                <p>Share your culinary creations with our community.</p>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                <div class="form-group">
+                    <label class="form-label" for="recipe-title">Recipe Title</label>
+                    <input type="text" name="recipe-title" id="recipe-title" class="form-control" placeholder="Enter your recipe title" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea name="description" id="description" class="form-control" placeholder="Describe your recipe" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="ingredients">Ingredients</label>
+                    <div id="ingredients-container">
+                        <input type="text" name="ingredient" class="form-control" placeholder="Add ingredient">
+                    </div>
+                    <button type="button" onclick="addIngredient()">Add Ingredient</button>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="instructions">Instructions</label>
+                    <div id="instructions-container">
+                        <textarea name="instruction" class="form-control" placeholder="Add instruction step" rows="3" required></textarea>
+                    </div>
+                    <button type="button" onclick="addInstruction()">Add Instruction</button>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="file-upload">Recipe Image</label>
+                    <div class="upload-container">
+                        <label for="file-upload" class="upload-btn">
+                            Upload a file
+                            <input type="file" name="file-upload" id="file-upload" class="file-input" required>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn">Cancel</button>
+                    <button type="submit" class="submit-btn">Submit Recipe</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <script>
+        function addIngredient() {
+            const container = document.getElementById('ingredients-container');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'ingredient';
+            input.className = 'form-control';
+            input.placeholder = 'Add ingredient';
+            container.appendChild(input);
+        }
+
+        function addInstruction() {
+            const container = document.getElementById('instructions-container');
+            const textarea = document.createElement('textarea');
+            textarea.name = 'instruction';
+            textarea.className = 'form-control';
+            textarea.placeholder = 'Add instruction step';
+            textarea.rows = '3';
+            container.appendChild(textarea);
+        }
+    </script>
+</body>
+</html>

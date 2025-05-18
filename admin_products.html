@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Products</title>
+    <style>
+        /* Reset some default browser styles */
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            /* Enable flexbox for the body */
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+        }
+
+        .sidebar {
+            width: 240px;
+            background-color: #343a40;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 20px;
+            box-sizing: border-box;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            /* Allow it to take remaining width */
+            margin-left: 240px;
+            /* Account for the sidebar width */
+            padding: 20px;
+            box-sizing: border-box;
+            height: auto;
+            /* Adjust height based on content */
+        }
+
+        /* Sidebar Menu */
+        .sidebar-header {
+            padding: 0 15px 20px;
+            text-align: center;
+            border-bottom: 1px solid #4b545c;
+        }
+
+        .sidebar-menu {
+            padding: 0;
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            color: #c2c7d0;
+            text-decoration: none;
+            padding: 12px 15px;
+            display: block;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: #2c3136;
+            color: white;
+        }
+
+        .sidebar-menu a.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid #dee2e6;
+            padding: 12px 15px;
+            text-align: left;
+            box-sizing: border-box;
+        }
+
+        .data-table th {
+            background-color: #495057;
+            color: white;
+            font-weight: bold;
+        }
+
+        .data-table tbody tr:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Header */
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .content-header h1 {
+            margin: 0;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3>Admin Panel</h3>
+                <p>Welcome, {{ session['admin_username'] }}</p>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('admin_users') }}">Users</a></li>
+                <li><a href="{{ url_for('admin_sellers') }}">Sellers</a></li>
+                <li><a href="{{ url_for('admin_products') }}" class="active">Products</a></li>
+                <li><a href="{{ url_for('admin_orders') }}">Orders</a></li>
+                <li><a href="{{ url_for('admin_logout') }}">Logout</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div class="content-header">
+                <h1>Product Management</h1>
+                <a href="{{ url_for('admin_logout') }}" class="logout-btn">Logout</a>
+            </div>
+
+            <h2>All Products</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Category</th>
+                        <th>Seller</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr {% if product.product_quantity < 5 %} style="background-color: #ffe0b2;" {% endif %}>
+                        <td>{{ product.id }}</td>
+                        <td>{{ product.product_name }}</td>
+                        <td>₹{{ "{:.2f}".format(product.product_price) }}</td>
+                        <td>{{ product.product_quantity }}</td>
+                        <td>{{ product.category }}</td>
+                        <td>{{ product.business_name }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align: center;">No products found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Skincare Tips Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .table-responsive {
+            margin-top: 20px;
+        }
+
+        .tips-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .content-preview {
+            max-height: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-sidebar {
+            background-color: #f8f9fa;
+            padding: 20px;
+            height: 100%;
+        }
+
+        .admin-sidebar a {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .admin-sidebar a:hover {
+            background-color: #e9ecef;
+        }
+
+        .admin-sidebar a.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 admin-sidebar">
+                <h4>Admin Panel</h4>
+                <hr>
+                <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('admin_users') }}">Users</a>
+                <a href="{{ url_for('admin_sellers') }}">Sellers</a>
+                <a href="{{ url_for('admin_products') }}">Products</a>
+                <a href="{{ url_for('admin_orders') }}">Orders</a>
+                <a href="{{ url_for('admin_skincare_tips') }}" class="active">Skincare Tips</a>
+                <hr>
+                <a href="{{ url_for('admin_logout') }}">Logout</a>
+            </div>
+            <!-- Main Content -->
+            <div class="col-md-10">
+                <div class="container mt-4">
+                    <div class="tips-header">
+                        <h2>Skincare Tips Management</h2>
+                        <a href="{{ url_for('admin_add_skincare_tip') }}" class="btn btn-primary">Add New Tip</a>
+                    </div>
+
+                    {% if tips %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Content Preview</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tip in tips %}
+                                <tr>
+                                    <td>{{ tip.id }}</td>
+                                    <td>{{ tip.title }}</td>
+                                    <td>{{ tip.category }}</td>
+                                    <td class="content-preview">{{ tip.content[:100] }}{% if tip.content|length > 100
+                                        %}...{% endif %}</td>
+                                    <td>{{ tip.created_at.strftime('%Y-%m-%d') }}</td>
+                                    <td>
+                                        <a href="{{ url_for('admin_edit_skincare_tip', tip_id=tip.id) }}"
+                                            class="btn btn-sm btn-warning">Edit</a>
+                                        <a href="{{ url_for('admin_delete_skincare_tip', tip_id=tip.id) }}"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Are you sure you want to delete this skincare tip?')">Delete</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        No skincare tips have been added yet. Click the "Add New Tip" button to create one.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

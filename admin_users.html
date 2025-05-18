@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Users</title>
+    <style>
+        /* Reset some default browser styles */
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            /* Enable flexbox for the body */
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+        }
+
+        .sidebar {
+            width: 240px;
+            background-color: #343a40;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 20px;
+            box-sizing: border-box;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            /* Allow it to take remaining width */
+            margin-left: 240px;
+            /* Account for the sidebar width */
+            padding: 20px;
+            box-sizing: border-box;
+            height: auto;
+            /* Adjust height based on content */
+        }
+
+        /* Sidebar Menu */
+        .sidebar-header {
+            padding: 0 15px 20px;
+            text-align: center;
+            border-bottom: 1px solid #4b545c;
+        }
+
+        .sidebar-menu {
+            padding: 0;
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            color: #c2c7d0;
+            text-decoration: none;
+            padding: 12px 15px;
+            display: block;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: #2c3136;
+            color: white;
+        }
+
+        .sidebar-menu a.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid #dee2e6;
+            padding: 12px 15px;
+            text-align: left;
+            box-sizing: border-box;
+        }
+
+        .data-table th {
+            background-color: #495057;
+            color: white;
+            font-weight: bold;
+        }
+
+        .data-table tbody tr:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Header */
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* Search and Filter */
+        .search-filter {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            flex-grow: 1;
+            max-width: 300px;
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        /* Buttons */
+        .btn-view,
+        .btn-edit,
+        .btn-delete {
+            padding: 5px 10px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            color: white;
+            text-decoration: none;
+            /* To ensure no underlines if used in <a> tag */
+        }
+
+        .btn-view {
+            background-color: #17a2b8;
+        }
+
+        .btn-edit {
+            background-color: #ffc107;
+            color: #212529;
+            /* Dark text for better contrast on yellow */
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3>Admin Dashboard</h3>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('admin_users') }}" class="active">Users</a></li>
+                <li><a href="{{ url_for('admin_sellers') }}">Sellers</a></li>
+                <li><a href="{{ url_for('admin_products') }}">Products</a></li>
+                <li><a href="{{ url_for('admin_orders') }}">Orders</a></li>
+                <li><a href="{{ url_for('admin_logout') }}">Logout</a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <div class="content-header">
+                <h1>User Management</h1>
+                <a href="{{ url_for('admin_logout') }}" class="logout-btn">Logout</a>
+            </div>
+
+            <div class="search-filter">
+                <input type="text" id="searchInput" class="search-box" placeholder="Search users...">
+            </div>
+
+            <table class="data-table" id="usersTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <a href="#" class="btn-view" onclick="viewUser({{ user.id }})">View</a>
+                            <a href="#" class="btn-edit" onclick="editUser({{ user.id }})">Edit</a>
+                            <a href="#" class="btn-delete" onclick="deleteUser({{ user.id }})">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% if not users %}
+                    <tr>
+                        <td colspan="4" style="text-align: center;">No users found</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function () {
+            const input = this.value.toLowerCase();
+            const table = document.getElementById('usersTable');
+            const rows = table.getElementsByTagName('tr');
+
+            // Start from index 1 to skip header row
+            for (let i = 1; i < rows.length; i++) {
+                const username = rows[i].getElementsByTagName('td')[1];
+                const email = rows[i].getElementsByTagName('td')[2];
+
+                if (username && email) {
+                    const usernameValue = username.textContent || username.innerText;
+                    const emailValue = email.textContent || email.innerText;
+
+                    if (usernameValue.toLowerCase().indexOf(input) > -1 || emailValue.toLowerCase().indexOf(input) > -1) {
+                        rows[i].style.display = "";
+                    } else {
+                        rows[i].style.display = "none";
+                    }
+                }
+            }
+        });
+
+        // Placeholder functions for user actions
+        function viewUser(id) {
+            alert('View user details for ID: ' + id);
+            // Implement view user functionality
+        }
+
+        function editUser(id) {
+            alert('Edit user with ID: ' + id);
+            // Implement edit user functionality
+        }
+
+        function deleteUser(id) {
+            if (confirm('Are you sure you want to delete user with ID: ' + id + '?')) {
+                alert('User deleted');
+                // Implement delete user functionality
+            }
+        }
+    </script>
+</body>
+
+</html>

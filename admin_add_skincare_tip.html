@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Add Skincare Tip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .admin-sidebar {
+            background-color: #f8f9fa;
+            padding: 20px;
+            height: 100%;
+        }
+
+        .admin-sidebar a {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .admin-sidebar a:hover {
+            background-color: #e9ecef;
+        }
+
+        .admin-sidebar a.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .content-textarea {
+            min-height: 300px;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 admin-sidebar">
+                <h4>Admin Panel</h4>
+                <hr>
+                <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('admin_users') }}">Users</a>
+                <a href="{{ url_for('admin_sellers') }}">Sellers</a>
+                <a href="{{ url_for('admin_products') }}">Products</a>
+                <a href="{{ url_for('admin_orders') }}">Orders</a>
+                <a href="{{ url_for('admin_skincare_tips') }}" class="active">Skincare Tips</a>
+                <hr>
+                <a href="{{ url_for('admin_logout') }}">Logout</a>
+            </div>
+            <!-- Main Content -->
+            <div class="col-md-10">
+                <div class="container mt-4">
+                    <div class="form-container">
+                        <h2 class="mb-4">Add New Skincare Tip</h2>
+
+                        {% if msg %}
+                        <div class="alert alert-info">{{ msg }}</div>
+                        {% endif %}
+
+                        <form action="{{ url_for('admin_add_skincare_tip') }}" method="post"
+                            enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Title:</label>
+                                <input type="text" class="form-control" id="title" name="title" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Category:</label>
+                                <select class="form-select" id="category" name="category" required>
+                                    <option value="">Select a category</option>
+                                    <option value="Daily Skincare">Daily Skincare</option>
+                                    <option value="Face Care">Face Care</option>
+                                    <option value="Body Care">Body Care</option>
+                                    <option value="Acne Treatment">Acne Treatment</option>
+                                    <option value="Anti-Aging">Anti-Aging</option>
+                                    <option value="Dry Skin">Dry Skin</option>
+                                    <option value="Oily Skin">Oily Skin</option>
+                                    <option value="Natural Remedies">Natural Remedies</option>
+                                    <option value="Product Tips">Product Tips</option>
+                                    <option value="Seasonal Care">Seasonal Care</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="content" class="form-label">Content:</label>
+                                <textarea class="form-control content-textarea" id="content" name="content" rows="10"
+                                    required></textarea>
+                                <small class="text-muted">You can use basic HTML formatting for paragraphs, lists, and
+                                    emphasis.</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="tip_image" class="form-label">Image (optional):</label>
+                                <input type="file" class="form-control" id="tip_image" name="tip_image"
+                                    accept="image/png, image/jpeg, image/jpg, image/gif">
+                                <small class="text-muted">Recommended image size: 800x500 pixels</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <a href="{{ url_for('admin_skincare_tips') }}" class="btn btn-secondary">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

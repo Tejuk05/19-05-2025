@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Order Tracking | Traditional Treasures</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #FF5733;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .tracking-form {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #FF5733;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #e04313;
+        }
+
+        .tracking-info {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tracking-info h3 {
+            color: #FF5733;
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .order-details {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-details p {
+            margin: 8px 0;
+            font-size: 15px;
+        }
+
+        .order-details strong {
+            color: #555;
+            width: 140px;
+            display: inline-block;
+        }
+
+        .status-updates h4 {
+            color: #555;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        .status-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .status-item {
+            position: relative;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+        }
+
+        .status-item:before {
+            content: "";
+            position: absolute;
+            left: -30px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #FF5733;
+            z-index: 2;
+        }
+
+        .status-item:after {
+            content: "";
+            position: absolute;
+            left: -23px;
+            top: 20px;
+            height: 100%;
+            width: 2px;
+            background: #ddd;
+            z-index: 1;
+        }
+
+        .status-item:last-child:after {
+            display: none;
+        }
+
+        .status-item .status-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .status-item .status-details {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .status-active .status-title {
+            color: #FF5733;
+        }
+
+        .status-active:before {
+            background: #FF5733;
+            box-shadow: 0 0 0 4px rgba(255, 87, 51, 0.2);
+        }
+
+        .error-message {
+            color: #d9534f;
+            background-color: #f9f2f2;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .product-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .product-list li {
+            margin-bottom: 8px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .shipping-info {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            margin-bottom: 25px;
+        }
+
+        .shipping-info h4 {
+            margin-top: 0;
+            color: #555;
+            margin-bottom: 12px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        .loading img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: #FF5733;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Order Tracking</h2>
+        <div class="tracking-form">
+            <label for="orderId">Enter your Order ID:</label>
+            <input type="text" id="orderId" name="orderId" placeholder="e.g., 123456">
+            <button onclick="trackOrder()">Track Order</button>
+            <p id="errorMessage" class="error-message" style="display: none;"></p>
+        </div>
+
+        <div id="loading" class="loading">
+            <p>Loading order details...</p>
+        </div>
+
+        <div id="trackingResult" class="tracking-info" style="display: none;">
+            <h3>Order Details</h3>
+            <div class="order-details">
+                <p><strong>Order Number:</strong> <span id="orderNumber"></span></p>
+                <p><strong>Customer Name:</strong> <span id="customerName"></span></p>
+                <p><strong>Order Date:</strong> <span id="orderDate"></span> at <span id="orderTime"></span></p>
+                <p><strong>Total Amount:</strong> ₹<span id="totalAmount"></span></p>
+
+                <h4>Ordered Products:</h4>
+                <ul id="productList" class="product-list">
+                </ul>
+            </div>
+
+            <div class="shipping-info">
+                <h4>Shipping Information</h4>
+                <p><strong>Address:</strong> <span id="shippingAddress"></span></p>
+                <p><strong>Carrier:</strong> <span id="shippingCarrier"></span></p>
+                <p><strong>Tracking #:</strong> <span id="trackingNumber"></span></p>
+                <p><strong>Current Status:</strong> <span id="currentStatus"
+                        style="font-weight: bold; color: #FF5733;"></span></p>
+            </div>
+
+            <div class="status-updates">
+                <h4>Tracking Timeline</h4>
+                <div id="statusUpdates" class="status-timeline">
+                </div>
+            </div>
+        </div>
+
+        <a href="/home" class="back-link">Back to Homepage</a>
+    </div>
+
+    <script>
+        async function trackOrder() {
+            // Get references to DOM elements
+            const orderIdInput = document.getElementById("orderId");
+            const trackingResultDiv = document.getElementById("trackingResult");
+            const loadingDiv = document.getElementById("loading");
+            const orderNumberSpan = document.getElementById("orderNumber");
+            const customerNameSpan = document.getElementById("customerName");
+            const orderDateSpan = document.getElementById("orderDate");
+            const orderTimeSpan = document.getElementById("orderTime");
+            const totalAmountSpan = document.getElementById("totalAmount");
+            const productListUl = document.getElementById("productList");
+            const shippingAddressSpan = document.getElementById("shippingAddress");
+            const shippingCarrierSpan = document.getElementById("shippingCarrier");
+            const trackingNumberSpan = document.getElementById("trackingNumber");
+            const currentStatusSpan = document.getElementById("currentStatus");
+            const statusUpdatesDiv = document.getElementById("statusUpdates");
+            const errorMessageDiv = document.getElementById("errorMessage");
+
+            // Reset display and clear previous content
+            trackingResultDiv.style.display = "none";
+            loadingDiv.style.display = "block";
+            productListUl.innerHTML = "";
+            statusUpdatesDiv.innerHTML = "";
+            errorMessageDiv.style.display = "none";
+
+            const orderId = orderIdInput.value.trim();
+
+            if (orderId === "") {
+                errorMessageDiv.textContent = "Please enter your Order ID.";
+                errorMessageDiv.style.display = "block";
+                loadingDiv.style.display = "none";
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('orderId', orderId);
+
+                const response = await fetch('/track_order_api', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const data = await response.json();
+
+                // Hide loading indicator
+                loadingDiv.style.display = "none";
+
+                if (response.ok) {
+                    // Display basic order information
+                    orderNumberSpan.textContent = data.orderNumber;
+                    customerNameSpan.textContent = data.customerName || "Not available";
+                    orderDateSpan.textContent = data.orderDate;
+                    orderTimeSpan.textContent = data.orderTime;
+                    totalAmountSpan.textContent = data.totalPrice ? data.totalPrice.toFixed(2) : "0.00";
+
+                    // Display shipping information
+                    shippingAddressSpan.textContent = data.shippingAddress;
+                    shippingCarrierSpan.textContent = data.shippingCarrier;
+                    trackingNumberSpan.textContent = data.trackingNumber;
+                    currentStatusSpan.textContent = data.currentStatus;
+
+                    // Display product list
+                    if (data.products && data.products.length > 0) {
+                        data.products.forEach(product => {
+                            const listItem = document.createElement("li");
+                            listItem.textContent = `${product.name} (Quantity: ${product.quantity})`;
+                            productListUl.appendChild(listItem);
+                        });
+                    } else {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = "No product details available";
+                        productListUl.appendChild(listItem);
+                    }
+
+                    // Display status timeline
+                    if (data.statusUpdates && data.statusUpdates.length > 0) {
+                        // Reverse to show most recent at the top
+                        data.statusUpdates.forEach((update, index) => {
+                            const statusItem = document.createElement("div");
+                            statusItem.classList.add("status-item");
+
+                            // Add active class to the current status
+                            if (index === data.statusUpdates.length - 1) {
+                                statusItem.classList.add("status-active");
+                            }
+
+                            statusItem.innerHTML = `
+                                <div class="status-title">${update.status}</div>
+                                <div class="status-details">
+                                    ${update.date} at ${update.time}<br>
+                                    ${update.location}
+                                </div>
+                            `;
+                            statusUpdatesDiv.appendChild(statusItem);
+                        });
+                    } else {
+                        statusUpdatesDiv.innerHTML = "<p>No tracking status available for this order.</p>";
+                    }
+
+                    // Show the tracking result
+                    trackingResultDiv.style.display = "block";
+                } else {
+                    // Display error message
+                    errorMessageDiv.textContent = data.error || "Error fetching order information.";
+                    errorMessageDiv.style.display = "block";
+                }
+
+            } catch (error) {
+                loadingDiv.style.display = "none";
+                errorMessageDiv.textContent = "Network error. Please try again.";
+                errorMessageDiv.style.display = "block";
+                console.error("Error:", error);
+            }
+        }
+    </script>
+</body>
+
+</html>

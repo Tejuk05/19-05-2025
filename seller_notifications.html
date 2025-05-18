@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Notifications</title>
+    <style>
+        /* ... your CSS styles ... */
+    </style>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h2>Your Notifications</h2>
+                <p>Stay updated on your orders and product activities.</p>
+                {% if notifications %}
+                <div class="list-group mt-4">
+                    {% for notification in notifications %}
+                    <div
+                        class="list-group-item list-group-item-action {% if not notification.is_read %}list-group-item-primary{% endif %}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ notification.title }}</h5>
+                            <small>{{ notification.created_at }}</small>
+                        </div>
+                        <p class="mb-1">{{ notification.message }}</p>
+                        {% if notification.customer_name %}
+                        <p><strong>Order details:</strong> {{ notification.quantity }}x {{ notification.product_name }}
+                            by
+                            {{ notification.customer_name }}, Total: ${{ notification.total_price }}</p>
+                        {% endif %}
+
+                        {% if not notification.is_read %}
+                        <form action="{{ url_for('mark_notification_read', notification_id=notification.id) }}"
+                            method="post" class="mt-2">
+                            <button type="submit" class="btn btn-sm btn-outline-primary">Mark as Read</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="alert alert-info mt-3">You don't have any notifications yet.</div>
+                {% endif %}
+
+                <div class="mt-4">
+                    <a href="{{ url_for('sellerdashboard') }}" class="btn btn-primary">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

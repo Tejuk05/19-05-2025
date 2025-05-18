@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Order Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h2 {
+            color: #FF5733;
+        }
+
+        .order-detail {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .order-status {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .order-status.shipped {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .order-status.processing {
+            background-color: #fff8e1;
+            color: #f57f17;
+        }
+
+        .order-status.cancelled {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        .order-info {
+            margin-bottom: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .info-label {
+            font-weight: bold;
+            width: 150px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #FF5733;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="order-detail">
+        <div class="order-header">
+            <h2>Order Details</h2>
+            <div
+                class="order-status {% if order.status.lower() == 'shipped' %}shipped{% elif order.status.lower() == 'processing' %}processing{% elif order.status.lower() == 'cancelled' %}cancelled{% endif %}">
+                {{ order.status }}
+            </div>
+        </div>
+
+        <div class="order-info">
+            <div class="info-row">
+                <div class="info-label">Order ID:</div>
+                <div>{{ order.order_id }}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Date:</div>
+                <div>{{ order.order_date.strftime('%B %d, %Y') }}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Total Amount:</div>
+                <div>₹{{ "%.2f"|format(order.total_amount) }}</div>
+            </div>
+            <!-- In a real application, you would include more details here like:
+                 - Items ordered
+                 - Shipping address
+                 - Payment information
+                 - Tracking details, etc. -->
+        </div>
+
+        <a href="{{ url_for('order_history') }}" class="back-link">← Back to Order History</a>
+    </div>
+</body>
+
+</html>
